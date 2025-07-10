@@ -267,3 +267,41 @@ option {
     outline: none;
     background: #fff;
 }
+
+/* === HELP PAGE STYLE === */
+.help-section {
+    margin: 32px auto;
+    max-width: 1000px;
+    background: white;
+    border: 4px solid #595959;
+}
+
+.help-section-block {
+    padding: 0 10px;
+}
+
+.help-section-title {
+    background: #595959;
+    color: #fff;
+    padding: 10px 18px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+.help-section-block ul {
+    margin: 12px 0 12px 24px;
+    padding-left: 18px;
+}
+
+.help-section-block li {
+    margin-bottom: 8px;
+    font-size: 1rem;
+}
+
+.help-section-block p {
+    margin-bottom: 12px;
+    font-size: 1.05rem;
+    color: black;
+}

@@ -10,5 +10,8 @@ Route::get('/', function () {
 Route::get('/profile', function () {
     return view('profile');
 });
+Route::get('/help', function () {
+    return view('help');
+});
 
 Route::get('/clear', [ClearCacheController::class, 'clearAll']);
