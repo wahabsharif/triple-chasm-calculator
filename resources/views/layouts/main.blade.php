@@ -74,7 +74,7 @@
                         </li>
                     </ul>
                 </div>
-                <div style="margin-left:auto; color:white; font-weight:500; font-size:1.1rem;">
+                <div class="nav-title">
                     @php
                         $segments = request()->segments();
                         $routeName = count($segments) ? ucfirst(str_replace('-', ' ', end($segments))) : 'Dashboard';
