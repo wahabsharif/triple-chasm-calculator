@@ -28,12 +28,12 @@ label {
 input,
 select,
 option {
-    background: #f9f9f9;
+    background: white;
     color: #333;
     font-size: 14px;
 }
 .container {
-    max-width: 100%;
+    max-width: 80vw;
     margin: 0 auto;
     padding: 0 20px;
 }

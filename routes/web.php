@@ -10,6 +10,9 @@ Route::get('/', function () {
 Route::get('/profile', function () {
     return view('profile');
 });
+Route::get('/questionnaire', function () {
+    return view('questionnaire');
+});
 Route::get('/help', function () {
     return view('help');
 });
