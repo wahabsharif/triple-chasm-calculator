@@ -1,296 +1,334 @@
 @extends('layouts.main')
 
 @section('content')
-    <form class="assessment-form">
+    <form class="assessment-form" method="POST" action="{{ route('profile.store') }}">
+        @csrf
         <div class="form-row">
             <label>Assessment Type:</label>
-            <select>
+            <select name="assessment_type" required>
                 <option value="">Select assessment type</option>
-                <option value="Diagnosis">Diagnosis</option>
-                <option value="Target">Target</option>
+                <option value="Diagnosis"
+                    {{ old('assessment_type', $profileData['assessment_type'] ?? '') == 'Diagnosis' ? 'selected' : '' }}>
+                    Diagnosis</option>
+                <option value="Target"
+                    {{ old('assessment_type', $profileData['assessment_type'] ?? '') == 'Target' ? 'selected' : '' }}>
+                    Target</option>
             </select>
         </div>
         <div class="form-row">
             <label>Assessment Date:</label>
-            <input type="text" value="3/13/2025" />
+            <input type="date" name="assessment_date"
+                value="{{ old('assessment_date', $profileData['assessment_date'] ?? '2025-03-13') }}" required />
         </div>
         <div class="form-row">
             <label>Target Date (if applicable):</label>
-            <input type="text" />
+            <input type="date" name="target_date" value="{{ old('target_date', $profileData['target_date'] ?? '') }}" />
         </div>
         <div class="form-row">
             <label>First Name:</label>
-            <input type="text" value="A" />
+            <input type="text" name="first_name" value="{{ old('first_name', $profileData['first_name'] ?? 'A') }}"
+                required />
         </div>
         <div class="form-row">
             <label>Last Name:</label>
-            <input type="text" value="Founder" />
+            <input type="text" name="last_name" value="{{ old('last_name', $profileData['last_name'] ?? 'Founder') }}"
+                required />
         </div>
         <div class="form-row">
             <label>Venture Name:</label>
-            <input type="text" value="Demo Venture" />
+            <input type="text" name="venture_name"
+                value="{{ old('venture_name', $profileData['venture_name'] ?? 'Demo Venture') }}" required />
         </div>
         <div class="form-row">
             <label>Venture Motivation:</label>
-            <select>
-                <option value="">Select the option that best describes your motivation
-                </option>
-                <option value="Traditional commercial business">Traditional commercial business</option>
-                <option value="Mission-driven business">Mission-driven business</option>
-                <option value="Social business">Social business</option>
-                <option value="Self-sustaining business">Self-sustaining business</option>
-                <option value="Philanthropic business">Philanthropic business</option>
+            <select name="venture_motivation" required>
+                <option value="">Select the option that best describes your motivation</option>
+                <option value="Traditional commercial business"
+                    {{ old('venture_motivation', $profileData['venture_motivation'] ?? '') == 'Traditional commercial business' ? 'selected' : '' }}>
+                    Traditional commercial business</option>
+                <option value="Mission-driven business"
+                    {{ old('venture_motivation', $profileData['venture_motivation'] ?? '') == 'Mission-driven business' ? 'selected' : '' }}>
+                    Mission-driven business</option>
+                <option value="Social business"
+                    {{ old('venture_motivation', $profileData['venture_motivation'] ?? '') == 'Social business' ? 'selected' : '' }}>
+                    Social business</option>
+                <option value="Self-sustaining business"
+                    {{ old('venture_motivation', $profileData['venture_motivation'] ?? '') == 'Self-sustaining business' ? 'selected' : '' }}>
+                    Self-sustaining business</option>
+                <option value="Philanthropic business"
+                    {{ old('venture_motivation', $profileData['venture_motivation'] ?? '') == 'Philanthropic business' ? 'selected' : '' }}>
+                    Philanthropic business</option>
             </select>
         </div>
         <div class="form-row">
             <label>Venture Sustainability Attitude:</label>
-            <select>
+            <select name="venture_sustainability_attitude" required>
                 <option value="">Select the option that best describes your attitude to sustainability</option>
-                <option value="Sustainability does not concern us">Sustainability does not concern us</option>
-                <option value="We are interested in sustainability but need to take practical steps to address it">We are
-                    interested in sustainability but need to take practical steps to address it</option>
-                <option value="We are interested in sustainability and have taken practical steps to address it">We are
-                    interested in sustainability and have taken practical steps to address it</option>
-                <option value="Sustainability is of primary importance to us but we need to improve implementation">
+                <option value="Sustainability does not concern us"
+                    {{ old('venture_sustainability_attitude', $profileData['venture_sustainability_attitude'] ?? '') == 'Sustainability does not concern us' ? 'selected' : '' }}>
+                    Sustainability does not concern us</option>
+                <option value="We are interested in sustainability but need to take practical steps to address it"
+                    {{ old('venture_sustainability_attitude', $profileData['venture_sustainability_attitude'] ?? '') == 'We are interested in sustainability but need to take practical steps to address it' ? 'selected' : '' }}>
+                    We are interested in sustainability but need to take practical steps to address it</option>
+                <option value="We are interested in sustainability and have taken practical steps to address it"
+                    {{ old('venture_sustainability_attitude', $profileData['venture_sustainability_attitude'] ?? '') == 'We are interested in sustainability and have taken practical steps to address it' ? 'selected' : '' }}>
+                    We are interested in sustainability and have taken practical steps to address it</option>
+                <option value="Sustainability is of primary importance to us but we need to improve implementation"
+                    {{ old('venture_sustainability_attitude', $profileData['venture_sustainability_attitude'] ?? '') == 'Sustainability is of primary importance to us but we need to improve implementation' ? 'selected' : '' }}>
                     Sustainability is of primary importance to us but we need to improve implementation</option>
                 <option
-                    value="Sustainability is of primary importance to us and we have a track record of successful implementation">
+                    value="Sustainability is of primary importance to us and we have a track record of successful implementation"
+                    {{ old('venture_sustainability_attitude', $profileData['venture_sustainability_attitude'] ?? '') == 'Sustainability is of primary importance to us and we have a track record of successful implementation' ? 'selected' : '' }}>
                     Sustainability is of primary importance to us and we have a track record of successful implementation
                 </option>
             </select>
         </div>
         <div class="form-row">
             <label>Product Name:</label>
-            <input type="text" value="Demo Product" />
+            <input type="text" name="product_name"
+                value="{{ old('product_name', $profileData['product_name'] ?? 'Demo Product') }}" required />
         </div>
         <div class="form-row">
             <label>Product Maturity:</label>
-            <select>
+            <select name="product_maturity" required>
                 <option value="">Select product Maturity</option>
-                <option value="0">0</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
+                @for ($i = 0; $i <= 10; $i++)
+                    <option value="{{ $i }}"
+                        {{ old('product_maturity', $profileData['product_maturity'] ?? '') == $i ? 'selected' : '' }}>
+                        {{ $i }}</option>
+                @endfor
             </select>
         </div>
         <div class="form-row">
             <label>Primary Sector / Market Space:</label>
-            <select>
+            <select name="primary_sector" required>
                 <option value="">Select primary (sub)market category</option>
-                <option value="Agri-food">Agri-food</option>
-                <option value="Agri-food / Pesticides, Herbicides & Fertilizers">Agri-food / Pesticides, Herbicides &
-                    Fertilizers</option>
-                <option value="Agri-food / Research, Analytics & Testing">Agri-food / Research, Analytics & Testing</option>
-                <option value="Agri-food / Monitoring, Safety & Compliance">Agri-food / Monitoring, Safety & Compliance
-                </option>
-                <option value="Agri-food / Packaging & Processing">Agri-food / Packaging & Processing</option>
-                <option value="Agri-food / Precision Farming">Agri-food / Precision Farming</option>
-                <option value="Agri-food / Plant-based products">Agri-food / Plant-based products</option>
-                <option value="Agri-food / Dairy Products">Agri-food / Dairy Products</option>
-                <option value="Agri-food / Non-conventional Food Sources">Agri-food / Non-conventional Food Sources</option>
-                <option value="Agri-food / Animal-based Products">Agri-food / Animal-based Products</option>
-                <option value="Agri-food / Drinks">Agri-food / Drinks</option>
-                <option value="Agri-food / Waste Management">Agri-food / Waste Management</option>
-                <option value="Agri-food / Food Marketplaces">Agri-food / Food Marketplaces</option>
-                <option value="Agri-food / Food Distribution Networks">Agri-food / Food Distribution Networks</option>
-                <option value="Agri-food / Social Applications & Networks">Agri-food / Social Applications & Networks
-                </option>
-                <option value="Bio-tech">Bio-tech</option>
-                <option value="Bio-tech / White (Industrial) Biotech Products & Services">Bio-tech / White (Industrial)
-                    Biotech Products & Services</option>
-                <option value="Bio-tech / Red (Bio-Pharma) Biotech Products & Services">Bio-tech / Red (Bio-Pharma) Biotech
-                    Products & Services</option>
-                <option value="Bio-tech / Green (Plant) Biotech Products & Services">Bio-tech / Green (Plant) Biotech
-                    Products & Services</option>
-                <option value="Bio-tech / Blue (Marine) Biotech Products & Services">Bio-tech / Blue (Marine) Biotech
-                    Products & Services</option>
-                <option value="Bio-tech / Research and Development Tools & Platforms">Bio-tech / Research and Development
-                    Tools & Platforms</option>
-                <option value="Bio-tech / Analytics & Testing Platforms & Services">Bio-tech / Analytics & Testing Platforms
-                    & Services</option>
-                <option value="Bio-tech / Scaling Tools & Platforms">Bio-tech / Scaling Tools & Platforms</option>
-                <option value="Community & Social Provision">Community & Social Provision</option>
-                <option value="Community & Social Provision / Housing">Community & Social Provision / Housing</option>
-                <option value="Community & Social Provision / Civic Services">Community & Social Provision / Civic Services
-                </option>
-                <option value="Community & Social Provision / Land & Rates Management">Community & Social Provision / Land &
-                    Rates Management</option>
-                <option value="Community & Social Provision / Community Services">Community & Social Provision / Community
-                    Services</option>
-                <option value="Distribution, Logistics & Retail">Distribution, Logistics & Retail</option>
-                <option value="Distribution, Logistics & Retail / Warehousing">Distribution, Logistics & Retail /
-                    Warehousing</option>
-                <option value="Distribution, Logistics & Retail / Distribution Management">Distribution, Logistics & Retail
-                    / Distribution Management</option>
-                <option value="Distribution, Logistics & Retail / Logistics">Distribution, Logistics & Retail / Logistics
-                </option>
-                <option value="Distribution, Logistics & Retail / e-commerce">Distribution, Logistics & Retail / e-commerce
-                </option>
-                <option value="Distribution, Logistics & Retail / Retail stores">Distribution, Logistics & Retail / Retail
-                    stores</option>
-                <option value="Education & Training">Education & Training</option>
-                <option value="Education & Training / Primary Education">Education & Training / Primary Education</option>
-                <option value="Education & Training / Secondary Education">Education & Training / Secondary Education
-                </option>
-                <option value="Education & Training / Tertiary Education">Education & Training / Tertiary Education</option>
-                <option value="Education & Training / Life-long Learning">Education & Training / Life-long Learning</option>
-                <option value="Education & Training / e-learning">Education & Training / e-learning</option>
-                <option value="Electronics & Hardware">Electronics & Hardware</option>
-                <option value="Electronics & Hardware / Semi-conductors">Electronics & Hardware / Semi-conductors</option>
-                <option value="Electronics & Hardware / Processing Platforms">Electronics & Hardware / Processing Platforms
-                </option>
-                <option value="Electronics & Hardware / Integrated Products">Electronics & Hardware / Integrated Products
-                </option>
-                <option value="Electronics & Hardware / Network and Network Management">Electronics & Hardware / Network and
-                    Network Management</option>
-                <option value="Engineering">Engineering</option>
-                <option value="Engineering / Aerospace">Engineering / Aerospace</option>
-                <option value="Engineering / Automotive">Engineering / Automotive</option>
-                <option value="Engineering / Construction">Engineering / Construction</option>
-                <option value="Engineering / Oil & Gas">Engineering / Oil & Gas</option>
-                <option value="Engineering / Materials">Engineering / Materials</option>
-                <option value="Engineering / Marine">Engineering / Marine</option>
-                <option value="Engineering / Mining">Engineering / Mining</option>
-                <option value="Fashion & Clothing">Fashion & Clothing</option>
-                <option value="Fashion & Clothing / Industrial Clothing">Fashion & Clothing / Industrial Clothing</option>
-                <option value="Fashion & Clothing / Fashion Clothing">Fashion & Clothing / Fashion Clothing</option>
-                <option value="Fashion & Clothing / Footwear">Fashion & Clothing / Footwear</option>
-                <option value="Fashion & Clothing / Safety Apparel">Fashion & Clothing / Safety Apparel</option>
-                <option value="Financial Services">Financial Services</option>
-                <option value="Financial Services / Insurance Services">Financial Services / Insurance Services</option>
-                <option value="Financial Services / e-payment systems">Financial Services / e-payment systems</option>
-                <option value="Financial Services / Retail Banking">Financial Services / Retail Banking</option>
-                <option value="Financial Services / Corporate Banking & Finance">Financial Services / Corporate Banking &
-                    Finance</option>
-                <option value="Financial Services / Share Trading & Exchanges">Financial Services / Share Trading &
-                    Exchanges</option>
-                <option value="Financial Services / General Financial Management">Financial Services / General Financial
-                    Management</option>
-                <option value="Healthcare & Wellbeing">Healthcare & Wellbeing</option>
-                <option value="Healthcare & Wellbeing / Gene-level insights & Interventions">Healthcare & Wellbeing /
-                    Gene-level insights & Interventions</option>
-                <option value="Healthcare & Wellbeing / Cell-level insights & interventions">Healthcare & Wellbeing /
-                    Cell-level insights & interventions</option>
-                <option value="Healthcare & Wellbeing / Organ-level insights & interventions">Healthcare & Wellbeing /
-                    Organ-level insights & interventions</option>
-                <option value="Healthcare & Wellbeing / Metrology">Healthcare & Wellbeing / Metrology</option>
-                <option value="Healthcare & Wellbeing / Diagnostics">Healthcare & Wellbeing / Diagnostics</option>
-                <option value="Healthcare & Wellbeing / Therapeutics">Healthcare & Wellbeing / Therapeutics</option>
-                <option value="Healthcare & Wellbeing / Clinical Testing/Regulatory Services">Healthcare & Wellbeing /
-                    Clinical Testing/Regulatory Services</option>
-                <option value="Healthcare & Wellbeing / Primary Healthcare">Healthcare & Wellbeing / Primary Healthcare
-                </option>
-                <option value="Healthcare & Wellbeing / Secondary Healthcare">Healthcare & Wellbeing / Secondary Healthcare
-                </option>
-                <option value="Healthcare & Wellbeing / Tertiary Healthcare">Healthcare & Wellbeing / Tertiary Healthcare
-                </option>
-                <option value="Healthcare & Wellbeing / Electronic Health Management Services">Healthcare & Wellbeing /
-                    Electronic Health Management Services</option>
-                <option value="Healthcare & Wellbeing / Care-in-the Community">Healthcare & Wellbeing / Care-in-the
-                    Community</option>
-                <option value="Media & Entertainment">Media & Entertainment</option>
-                <option value="Media & Entertainment / Content-centric products and services: video">Media & Entertainment
-                    / Content-centric products and services: video</option>
-                <option value="Media & Entertainment / Content-centric products and services: music">Media & Entertainment
-                    / Content-centric products and services: music</option>
-                <option value="Media & Entertainment / Image-based services">Media & Entertainment / Image-based services
-                </option>
-                <option value="Media & Entertainment / Print Media">Media & Entertainment / Print Media</option>
-                <option value="Media & Entertainment / Gaming">Media & Entertainment / Gaming</option>
-                <option value="Professional Services">Professional Services</option>
-                <option value="Professional Services / General Legal">Professional Services / General Legal</option>
-                <option value="Professional Services / IP Management">Professional Services / IP Management</option>
-                <option value="Professional Services / Disputes & Litigation">Professional Services / Disputes & Litigation
-                </option>
-                <option value="Professional Services / Recruitment">Professional Services / Recruitment</option>
-                <option value="Professional Services / Management & Specialist Consulting">Professional Services /
-                    Management & Specialist Consulting</option>
-                <option value="Professional Services / Lab Equipment & Services">Professional Services / Lab Equipment &
-                    Services</option>
-                <option value="Professional Services / Logistics & Planning">Professional Services / Logistics & Planning
-                </option>
-                <option value="Professional Services / Computation-based Design Services">Professional Services /
-                    Computation-based Design Services</option>
-                <option value="Professional Services / Regulatory & Information Services">Professional Services /
-                    Regulatory & Information Services</option>
-                <option value="Professional Services / Research Services">Professional Services / Research Services
-                </option>
-                <option value="Resources & Energy">Resources & Energy</option>
-                <option value="Resources & Energy / Minerals">Resources & Energy / Minerals</option>
-                <option value="Resources & Energy / Forestry">Resources & Energy / Forestry</option>
-                <option value="Resources & Energy / Oil & Gas">Resources & Energy / Oil & Gas</option>
-                <option value="Resources & Energy / Coal">Resources & Energy / Coal</option>
-                <option value="Resources & Energy / Nuclear">Resources & Energy / Nuclear</option>
-                <option value="Resources & Energy / Renewable Energy">Resources & Energy / Renewable Energy</option>
-                <option value="Resources & Energy / Energy Storage">Resources & Energy / Energy Storage</option>
-                <option value="Resources & Energy / Smart Energy Management">Resources & Energy / Smart Energy Management
-                </option>
-                <option value="Resources & Energy / Smart Lighting">Resources & Energy / Smart Lighting</option>
-                <option value="Software & Computing">Software & Computing</option>
-                <option value="Software & Computing / Database Technologies">Software & Computing / Database Technologies
-                </option>
-                <option value="Software & Computing / Cloud Computing">Software & Computing / Cloud Computing</option>
-                <option value="Software & Computing / Software Languages">Software & Computing / Software Languages
-                </option>
-                <option value="Software & Computing / Algorithms">Software & Computing / Algorithms</option>
-                <option value="Telecommunications">Telecommunications</option>
-                <option value="Telecommunications / Fixed Networks">Telecommunications / Fixed Networks</option>
-                <option value="Telecommunications / Mobile Networks">Telecommunications / Mobile Networks</option>
-                <option value="Telecommunications / Hybrid Networks">Telecommunications / Hybrid Networks</option>
-                <option value="Telecommunications / Network Management">Telecommunications / Network Management</option>
-                <option value="Travel, Transportation & Hospitality">Travel, Transportation & Hospitality</option>
-                <option value="Travel, Transportation & Hospitality / Road">Travel, Transportation & Hospitality / Road
-                </option>
-                <option value="Travel, Transportation & Hospitality / Rail">Travel, Transportation & Hospitality / Rail
-                </option>
-                <option value="Travel, Transportation & Hospitality / Aviation">Travel, Transportation & Hospitality /
-                    Aviation</option>
-                <option value="Travel, Transportation & Hospitality / Marine">Travel, Transportation & Hospitality / Marine
-                </option>
-                <option value="Travel, Transportation & Hospitality / Navigation Systems">Travel, Transportation &
-                    Hospitality / Navigation Systems</option>
-                <option value="Travel, Transportation & Hospitality / Infrastructures">Travel, Transportation & Hospitality
-                    / Infrastructures</option>
-                <option value="Travel, Transportation & Hospitality / Accommodation">Travel, Transportation & Hospitality /
-                    Accommodation</option>
-                <option value="Other (Sub)Market Space">Other (Sub)Market Space</option>
-                <option value="Multiple (Sub)Market Spaces">Multiple (Sub)Market Spaces</option>
+                @php $primary_sector_val = old('primary_sector', $profileData['primary_sector'] ?? ''); @endphp
+                @foreach ([
+            'Agri-food',
+            'Agri-food / Pesticides, Herbicides & Fertilizers',
+            'Agri-food / Research, Analytics & Testing',
+            'Agri-food / Monitoring, Safety & Compliance',
+            'Agri-food / Packaging & Processing',
+            'Agri-food / Precision Farming',
+            'Agri-food / Plant-based products',
+            'Agri-food / Dairy Products',
+            'Agri-food / Non-conventional Food Sources',
+            'Agri-food / Animal-based Products',
+            'Agri-food / Drinks',
+            'Agri-food / Waste Management',
+            'Agri-food / Food Marketplaces',
+            'Agri-food / Food Distribution Networks',
+            'Agri-food / Social Applications & Networks',
+            'Bio-tech',
+            'Bio-tech / White (Industrial) Biotech Products & Services',
+            'Bio-tech / Red (Bio-Pharma) Biotech Products & Services',
+            'Bio-tech / Green (Plant) Biotech Products & Services',
+            'Bio-tech / Blue (Marine) Biotech Products & Services',
+            'Bio-tech / Research and Development Tools & Platforms',
+            'Bio-tech / Analytics & Testing Platforms & Services',
+            'Bio-tech / Scaling Tools & Platforms',
+            'Community & Social Provision',
+            'Community & Social Provision / Housing',
+            'Community & Social Provision / Civic Services',
+            'Community & Social Provision / Land & Rates Management',
+            'Community & Social Provision / Community Services',
+            'Distribution, Logistics & Retail',
+            'Distribution, Logistics & Retail / Warehousing',
+            'Distribution, Logistics & Retail / Distribution Management',
+            'Distribution, Logistics & Retail / Logistics',
+            'Distribution, Logistics & Retail / e-commerce',
+            'Distribution, Logistics & Retail / Retail stores',
+            'Education & Training',
+            'Education & Training / Primary Education',
+            'Education & Training / Secondary Education',
+            'Education & Training / Tertiary Education',
+            'Education & Training / Life-long Learning',
+            'Education & Training / e-learning',
+            'Electronics & Hardware',
+            'Electronics & Hardware / Semi-conductors',
+            'Electronics & Hardware / Processing Platforms',
+            'Electronics & Hardware / Integrated Products',
+            'Electronics & Hardware / Network and Network Management',
+            'Engineering',
+            'Engineering / Aerospace',
+            'Engineering / Automotive',
+            'Engineering / Construction',
+            'Engineering / Oil & Gas',
+            'Engineering / Materials',
+            'Engineering / Marine',
+            'Engineering / Mining',
+            'Fashion & Clothing',
+            'Fashion & Clothing / Industrial Clothing',
+            'Fashion & Clothing / Fashion Clothing',
+            'Fashion & Clothing / Footwear',
+            'Fashion & Clothing / Safety Apparel',
+            'Financial Services',
+            'Financial Services / Insurance Services',
+            'Financial Services / e-payment systems',
+            'Financial Services / Retail Banking',
+            'Financial Services / Corporate Banking & Finance',
+            'Financial Services / Share Trading & Exchanges',
+            'Financial Services / General Financial Management',
+            'Healthcare & Wellbeing',
+            'Healthcare & Wellbeing / Gene-level insights & Interventions',
+            'Healthcare & Wellbeing / Cell-level insights & interventions',
+            'Healthcare & Wellbeing / Organ-level insights & interventions',
+            'Healthcare & Wellbeing / Metrology',
+            'Healthcare & Wellbeing / Diagnostics',
+            'Healthcare & Wellbeing / Therapeutics',
+            'Healthcare & Wellbeing / Clinical Testing/Regulatory Services',
+            'Healthcare & Wellbeing / Primary Healthcare',
+            'Healthcare & Wellbeing / Secondary Healthcare',
+            'Healthcare & Wellbeing / Tertiary Healthcare',
+            'Healthcare & Wellbeing / Electronic Health Management Services',
+            'Healthcare & Wellbeing / Care-in-the Community',
+            'Media & Entertainment',
+            'Media & Entertainment / Content-centric products and services: video',
+            'Media & Entertainment / Content-centric products and services: music',
+            'Media & Entertainment / Image-based services',
+            'Media & Entertainment / Print Media',
+            'Media & Entertainment / Gaming',
+            'Professional Services',
+            'Professional Services / General Legal',
+            'Professional Services / IP Management',
+            'Professional Services / Disputes & Litigation',
+            'Professional Services / Recruitment',
+            'Professional Services / Management & Specialist Consulting',
+            'Professional Services / Lab Equipment & Services',
+            'Professional Services / Logistics & Planning',
+            'Professional Services / Computation-based Design Services',
+            'Professional Services / Regulatory & Information Services',
+            'Professional Services / Research Services',
+            'Resources & Energy',
+            'Resources & Energy / Minerals',
+            'Resources & Energy / Forestry',
+            'Resources & Energy / Oil & Gas',
+            'Resources & Energy / Coal',
+            'Resources & Energy / Nuclear',
+            'Resources & Energy / Renewable Energy',
+            'Resources & Energy / Energy Storage',
+            'Resources & Energy / Smart Energy Management',
+            'Resources & Energy / Smart Lighting',
+            'Software & Computing',
+            'Software & Computing / Database Technologies',
+            'Software & Computing / Cloud Computing',
+            'Software & Computing / Software Languages',
+            'Software & Computing / Algorithms',
+            'Telecommunications',
+            'Telecommunications / Fixed Networks',
+            'Telecommunications / Mobile Networks',
+            'Telecommunications / Hybrid Networks',
+            'Telecommunications / Network Management',
+            'Travel, Transportation & Hospitality',
+            'Travel, Transportation & Hospitality / Road',
+            'Travel, Transportation & Hospitality / Rail',
+            'Travel, Transportation & Hospitality / Aviation',
+            'Travel, Transportation & Hospitality / Marine',
+            'Travel, Transportation & Hospitality / Navigation Systems',
+            'Travel, Transportation & Hospitality / Infrastructures',
+            'Travel, Transportation & Hospitality / Accommodation',
+            'Other (Sub)Market Space',
+            'Multiple (Sub)Market Spaces',
+        ] as $sector)
+                    <option value="{{ $sector }}" {{ $primary_sector_val == $sector ? 'selected' : '' }}>
+                        {{ $sector }}</option>
+                @endforeach
+            </select>
+
             </select>
         </div>
         <div class="form-row">
             <label>'Other' Sector / Market Space:</label>
-            <input type="text" />
+            <input type="text" name="other_sector"
+                value="{{ old('other_sector', $profileData['other_sector'] ?? '') }}" />
         </div>
         <div class="form-row">
             <label>Full-time equivalent (FTE) employees:</label>
-            <input type="text" value="3.0" />
+            <input type="number" step="0.1" name="fte_employees"
+                value="{{ old('fte_employees', $profileData['fte_employees'] ?? '3.0') }}" required />
         </div>
         <div class="form-row">
             <label>Valuation:</label>
-            <input type="text" value="£1,000,000.00" />
+            <input type="text" name="valuation"
+                value="{{ old('valuation', $profileData['valuation'] ?? '£1,000,000.00') }}" required />
         </div>
         <div class="form-row">
             <label>Grants awarded to date:</label>
-            <input type="text" value="£150,000.00" />
+            <input type="text" name="grants_awarded"
+                value="{{ old('grants_awarded', $profileData['grants_awarded'] ?? '£150,000.00') }}" required />
         </div>
         <div class="form-row">
             <label>Equity investment raised to date:</label>
-            <input type="text" value="£0.00" />
+            <input type="text" name="equity_investment"
+                value="{{ old('equity_investment', $profileData['equity_investment'] ?? '£0.00') }}" required />
         </div>
         <div class="form-row">
             <label>Sales revenue generated to date:</label>
-            <input type="text" value="£0.00" />
+            <input type="text" name="sales_revenue"
+                value="{{ old('sales_revenue', $profileData['sales_revenue'] ?? '£0.00') }}" required />
         </div>
         <div class="form-row">
             <label>Estimated net profit to date:</label>
-            <input type="text" value="£0.00" />
+            <input type="text" name="estimated_net_profit"
+                value="{{ old('estimated_net_profit', $profileData['estimated_net_profit'] ?? '£0.00') }}" required />
         </div>
     </form>
+
+    <script>
+        const form = document.querySelector('.assessment-form');
+        let autosaveTimeout;
+
+        // Show validation errors
+        function showValidationErrors(errors) {
+            // Remove old error borders
+            form.querySelectorAll('.autosave-error').forEach(input => {
+                input.classList.remove('autosave-error');
+                input.style.borderColor = '';
+            });
+            for (const [field, messages] of Object.entries(errors)) {
+                const input = form.querySelector(`[name="${field}"]`);
+                if (input) {
+                    input.classList.add('autosave-error');
+                    input.style.borderColor = 'red';
+                }
+            }
+        }
+
+        function autosaveProfile() {
+            clearTimeout(autosaveTimeout);
+            autosaveTimeout = setTimeout(() => {
+                // Remove old error borders
+                form.querySelectorAll('.autosave-error').forEach(input => {
+                    input.classList.remove('autosave-error');
+                    input.style.borderColor = '';
+                });
+                const formData = new FormData(form);
+                fetch("{{ route('profile.store') }}", {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
+                            'Accept': 'application/json',
+                        },
+                        body: formData
+                    })
+                    .then(async response => {
+                        if (response.status === 422) {
+                            const data = await response.json();
+                            if (data.errors) {
+                                showValidationErrors(data.errors);
+                            }
+                        }
+                    })
+                    .catch(() => {
+                        // Silent fail
+                    });
+            }, 800);
+        }
+
+        // Only autosave on change (not input) to avoid partial data
+        form.querySelectorAll('input, select, textarea').forEach(input => {
+            input.addEventListener('change', autosaveProfile);
+        });
+    </script>
 @endsection
