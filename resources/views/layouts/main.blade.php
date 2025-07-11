@@ -18,7 +18,7 @@
     <header class="header">
         <nav class="navbar">
             <div
-                style="margin: 0 auto; padding: 0 20px; display: flex; align-items: center; gap: 2rem; max-width: 80vw;">
+                style="margin: 0 auto; padding: 0 20px; display: flex; align-items: center; gap: 2rem; max-width: 90vw;">
                 <div class="nav-brand">
                     <a href="{{ url('/') }}">
                         <img src="{{ asset('images/logo/triple-chasm-logo-light.png') }}" alt="Triple Chasm Calculator"

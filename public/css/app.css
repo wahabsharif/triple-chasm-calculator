@@ -33,7 +33,7 @@ option {
     font-size: 14px;
 }
 .container {
-    max-width: 80vw;
+    max-width: 90vw;
     margin: 0 auto;
     padding: 0 20px;
 }
@@ -249,7 +249,7 @@ option {
     text-align: right;
 }
 
-.form-row input[type="text"] {
+.form-row input {
     flex: 1;
     padding: 6px 8px;
     border: none;
