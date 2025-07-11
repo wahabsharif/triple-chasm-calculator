@@ -3,17 +3,19 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClearCacheController;
 use App\Http\Controllers\ProfileController;
-
-
+use App\Http\Controllers\QuestionnaireController;
 use App\Http\Controllers\DashboardController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/profile', function () {
     return view('profile');
 });
-Route::get('/questionnaire', function () {
-    return view('questionnaire');
-});
+
+
+// Questionnaire routes
+Route::get('/questionnaire', [QuestionnaireController::class, 'show'])->name('questionnaire.show');
+Route::post('/questionnaire', [QuestionnaireController::class, 'store'])->name('questionnaire.store');
+
 Route::get('/help', function () {
     return view('help');
 });

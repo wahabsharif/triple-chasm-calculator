@@ -35,54 +35,26 @@
                 <div class="vector-status-container">
                     <div class="vector-status-title">Vector Status</div>
                     <table class="vector-status-table">
-                        <tr>
-                            <td class="status needs-consideration">Needs consideration</td>
-                            <td class="vector-label">E1. Market Spaces</td>
-                        </tr>
-                        <tr>
-                            <td class="status looks-good">Looks good</td>
-                            <td class="vector-label">E2. Proposition Framing</td>
-                        </tr>
-                        <tr>
-                            <td class="status needs-consideration">Needs consideration</td>
-                            <td class="vector-label">E3. Customer Definition</td>
-                        </tr>
-                        <tr>
-                            <td class="status needs-attention">Needs attention</td>
-                            <td class="vector-label">E4. Distribution, Marketing and Sales</td>
-                        </tr>
-                        <tr>
-                            <td class="status looks-good">Looks good</td>
-                            <td class="vector-label">I1. Tech. Development and Contingent Deployment</td>
-                        </tr>
-                        <tr>
-                            <td class="status looks-good">Looks good</td>
-                            <td class="vector-label">I2. IP Management</td>
-                        </tr>
-                        <tr>
-                            <td class="status needs-consideration">Needs consideration</td>
-                            <td class="vector-label">I3. Product & Service Definition and Synthesis</td>
-                        </tr>
-                        <tr>
-                            <td class="status needs-consideration">Needs consideration</td>
-                            <td class="vector-label">I4. Manufacturing & deployment</td>
-                        </tr>
-                        <tr>
-                            <td class="status needs-consideration">Needs consideration</td>
-                            <td class="vector-label">I5. Talent, Leadership and Culture</td>
-                        </tr>
-                        <tr>
-                            <td class="status needs-consideration">Needs consideration</td>
-                            <td class="vector-label">I6. Funding and Investment</td>
-                        </tr>
-                        <tr>
-                            <td class="status needs-consideration">Needs consideration</td>
-                            <td class="vector-label">C1. Strategic Positioning</td>
-                        </tr>
-                        <tr>
-                            <td class="status needs-attention">Needs attention</td>
-                            <td class="vector-label">C2. Business Models</td>
-                        </tr>
+                        @if (isset($vectorResults) && is_array($vectorResults))
+                            @foreach ($vectorResults as $vector)
+                                @php
+                                    $statusClass = '';
+                                    if (trim($vector['status']) === '') {
+                                        $statusClass = '';
+                                    } elseif ($vector['status'] === 'Looks good') {
+                                        $statusClass = 'looks-good';
+                                    } elseif ($vector['status'] === 'Needs attention') {
+                                        $statusClass = 'needs-attention';
+                                    } elseif ($vector['status'] === 'Needs consideration') {
+                                        $statusClass = 'needs-consideration';
+                                    }
+                                @endphp
+                                <tr>
+                                    <td class="status {{ $statusClass }}">{{ $vector['status'] }}</td>
+                                    <td class="vector-label">{{ $vector['name'] }}</td>
+                                </tr>
+                            @endforeach
+                        @endif
                     </table>
                 </div>
                 <div class="vector-status-container">
