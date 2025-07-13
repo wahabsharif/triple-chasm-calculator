@@ -14,12 +14,9 @@ class DashboardController extends Controller
         // Get vector results from VectorController
         $vectorResults = [];
         $vectorController = app(\App\Http\Controllers\VectorController::class);
-        $response = $vectorController->calculate(request());
-        if (method_exists($response, 'getData')) {
-            $data = $response->getData(true);
-            if (isset($data['results'])) {
-                $vectorResults = $data['results'];
-            }
+        $data = $vectorController->calculate(request());
+        if (is_array($data) && isset($data['results'])) {
+            $vectorResults = $data['results'];
         }
 
         return view('dashboard', compact('profileData', 'vectorResults'));
