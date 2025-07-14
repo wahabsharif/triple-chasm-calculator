@@ -3,14 +3,8 @@
 @section('content')
     <div class="dashboard-container">
 
-        @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
-
         @if (!empty($profileData))
-            <div class="profile-and-vector-col">
+            <div class="profile-container" style="width: 30%">
                 <div class="profile-summary">
                     <div class="info-grid">
                         <div class="info-item">
@@ -32,8 +26,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="vector-status-container">
-                    <div class="vector-status-title">Vector Status</div>
+                <div class="card-container">
+                    <div class="card-title">Vector Status</div>
                     <table class="vector-status-table">
                         @if (isset($vectorResults) && is_array($vectorResults))
                             @foreach ($vectorResults as $vector)
@@ -57,8 +51,8 @@
                         @endif
                     </table>
                 </div>
-                <div class="vector-status-container">
-                    <div class="vector-status-title">Next Steps</div>
+                <div class="card-container">
+                    <div class="card-title">Next Steps</div>
                     <div class="next-steps-content">
                         @if (isset($stepsDataResult) && !empty($stepsDataResult))
                             <p>{!! nl2br(e($stepsDataResult)) !!}</p>
@@ -66,10 +60,16 @@
                     </div>
                 </div>
             </div>
+            <div class="card-container" style="width: 70%">
+                <div class="card-title">Commercialisation
+                    Intensity
+                    ({{ isset($questionnaire_response_sum_avg) ? number_format($questionnaire_response_sum_avg, 2) : 'N/A' }})
+                </div>
+            </div>
         @else
             <div class="empty-state">
-                <h2>No Profile Data</h2>
-                <p>Please complete your profile to see the dashboard summary.</p>
+                <h2>No Data Found</h2>
+                <p>Please complete your profile and questionnaire data to see the dashboard summary.</p>
                 <a href="{{ route('profile.show') }}" class="btn btn-primary">Complete Profile</a>
             </div>
         @endif
@@ -80,13 +80,15 @@
             max-width: 90vw;
             margin: 0 auto;
             padding: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
         }
 
-
-        .profile-and-vector-col {
+        .profile-container {
             display: flex;
             flex-direction: column;
-            max-width: 550px;
+            width: 30%;
             gap: 20px;
         }
 
@@ -120,15 +122,14 @@
             font-size: 14px
         }
 
-        .vector-status-container {
-            max-width: 550px;
+        .card-container {
             border: 4px solid #595959;
             border-radius: 4px;
             background: #f8f8f8;
             font-family: Arial, sans-serif;
         }
 
-        .vector-status-title {
+        .card-title {
             background: #595959;
             color: #fff;
             font-size: 18px;

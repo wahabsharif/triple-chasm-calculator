@@ -33,11 +33,13 @@ class DashboardController extends Controller
 
         $vectorResults = $this->processVectorResults($questionnaires, $profileData, $intensityScoreValues);
         $stepsDataResult = $this->determineStepsDataResult($vectorResults);
+        $questionnaire_response_sum_avg = $this->getQuestionnaireResponseSumAvg($vectorResults);
 
         return view('dashboard', compact(
             'profileData',
             'vectorResults',
-            'stepsDataResult'
+            'stepsDataResult',
+            'questionnaire_response_sum_avg'
         ));
     }
 
@@ -169,9 +171,24 @@ class DashboardController extends Controller
         return self::STEPS_DATA['ELSE'];
     }
 
+
     private function calculateQuestionnaireResponseAvgSum(array $vectorResults): float
     {
         return array_sum(array_column($vectorResults, 'questionnaire_response_avg'));
+    }
+
+    /**
+     * Get the average of all questionnaire_response_avg values and return as questionnaire_response_sum_avg
+     */
+    public function getQuestionnaireResponseSumAvg(array $vectorResults): float
+    {
+        $avgs = array_column($vectorResults, 'questionnaire_response_avg');
+        $count = count($avgs);
+        if ($count === 0) {
+            return 0;
+        }
+        $sum = array_sum($avgs);
+        return $sum / $count;
     }
 
     private function calculateStatusCountSum(array $vectorResults): int
