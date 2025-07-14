@@ -31,10 +31,12 @@ class DashboardController extends Controller
         ];
 
         $vectorResults = [];
-        // Calculate the sum of all questionnaire_response_avg from all data
         $questionnaire_response_avg_sum = array_sum(array_map(function ($vector) {
             return isset($vector['questionnaire_response_avg']) && $vector['questionnaire_response_avg'] !== '' ? (float)$vector['questionnaire_response_avg'] : 0;
         }, $questionnaires));
+
+        $status_count_sum = 0;
+
         foreach ($questionnaires as $i => $vector) {
             $vectorName = $vector['vector_name'] ?? 'Vector ' . ($i + 1);
             $productMaturityIndex = isset($profileData['product_maturity']) ? (int)$profileData['product_maturity'] : null;
@@ -65,6 +67,8 @@ class DashboardController extends Controller
 
             // Determine status
             $status = '';
+            $status_count = 0; // Initialize for this vector
+
             if ($intensity_score_sum == 0) {
                 $status = '';
             } elseif ($intensity_less_score < 10) {
@@ -75,6 +79,17 @@ class DashboardController extends Controller
                 $status = 'Needs consideration';
             }
 
+            // Count status as per rules
+            if ($status === 'Looks good') {
+                $status_count = 2;
+            } elseif ($status === 'Needs consideration') {
+                $status_count = 1;
+            } else {
+                $status_count = 0;
+            }
+
+            $status_count_sum += $status_count;
+
             $vectorResults[] = [
                 'vector_name' => $vectorName,
                 'intensity_score' => $intensity_score,
@@ -82,11 +97,14 @@ class DashboardController extends Controller
                 'questionnaire_response_avg' => $questionnaire_response_avg,
                 'intensity_less_score' => $intensity_less_score,
                 'questionnaire_response_avg_sum' => $questionnaire_response_avg_sum,
-                'status' => $status
+                'status' => $status,
+                'status_count' => $status_count,
             ];
         }
 
         Log::info('DashboardController returning vector results', $vectorResults);
-        return view('dashboard', compact('profileData', 'vectorResults', 'stepsData', 'questionnaire_response_avg_sum'));
+        Log::info('Total status_count_sum: ' . $status_count_sum);
+
+        return view('dashboard', compact('profileData', 'vectorResults', 'stepsData', 'questionnaire_response_avg_sum', 'status_count_sum'));
     }
 }
