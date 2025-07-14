@@ -31,6 +31,7 @@ class QuestionnaireController extends Controller
         session(['questionnaire_data' => $questionnaireData]);
         return redirect()->route('questionnaire.show')->with('success', 'Questionnaire saved successfully!');
     }
+
     /**
      * Show the questionnaire form
      */
@@ -48,33 +49,56 @@ class QuestionnaireController extends Controller
     private function getQuestionnaireDataWithAvg($questionnaireData, $scoreMap)
     {
         $questionnaires = $this->getQuestionnaireData();
+
         foreach ($questionnaires as &$vector) {
             $vectorFieldNames = [];
             $id = $vector['id'];
+
+            // Generate field names for this vector
             for ($i = 0; $i < count($vector['questions']); $i++) {
                 if ($id <= 4) {
                     $vectorFieldNames[] = 'Q' . (($id - 1) * 3 + $i + 1);
                 } else {
                     $vectorCodes = [
-                        5 => 'I1', 6 => 'I2', 7 => 'I3', 8 => 'I4',
-                        9 => 'I5', 10 => 'I6', 11 => 'C1', 12 => 'C2',
+                        5 => 'I1',
+                        6 => 'I2',
+                        7 => 'I3',
+                        8 => 'I4',
+                        9 => 'I5',
+                        10 => 'I6',
+                        11 => 'C1',
+                        12 => 'C2',
                     ];
                     $vectorFieldNames[] = $vectorCodes[$id] . '_' . ($i + 1);
                 }
             }
-            $vectorSum = 0;
-            $vectorCount = 0;
+
+            $responseScores = [];
+            $responseLabels = [];
+
+            // Get response scores for this vector
             foreach ($vectorFieldNames as $fname) {
                 $selectedLabel = $questionnaireData[$fname] ?? null;
                 if ($selectedLabel && isset($scoreMap[$selectedLabel])) {
-                    $vectorSum += $scoreMap[$selectedLabel];
-                    $vectorCount++;
+                    $score = $scoreMap[$selectedLabel];
+                    $responseScores[] = $score;
+                    $responseLabels[] = $selectedLabel;
                 }
             }
-            $vector['vector_avg'] = $vectorCount ? number_format($vectorSum / $vectorCount, 1) : '';
+
+            // Calculate questionnaire_response_avg: sum of response scores divided by 3
+            if (count($responseScores) === 3) {
+                $scoreSum = array_sum($responseScores);
+                $questionnaire_response_avg = $scoreSum / 3;
+                $vector['questionnaire_response_avg'] = number_format($questionnaire_response_avg, 1);
+            } else {
+                $vector['questionnaire_response_avg'] = '';
+            }
         }
+
         return $questionnaires;
     }
+
     /**
      * Get all questionnaire data
      */
@@ -163,37 +187,16 @@ class QuestionnaireController extends Controller
             // Get the corresponding intensity score
             $intensityScore = $intensityScores[$vectorId - 1][$intensityIndex];
 
-            // Calculate questionnaire_response_avg from answer labels if provided, else from numeric answers mapped to closest label
-            $questionnaire_response_avg = null;
-            if (!empty($response['answer_labels']) && is_array($response['answer_labels'])) {
-                $labelValues = array_map(function($label) use ($responseValueMap) {
-                    return isset($responseValueMap[$label]) ? $responseValueMap[$label] : 0;
-                }, $response['answer_labels']);
-                $questionnaire_response_avg = array_sum($labelValues) / 3;
-            } else {
-                // If only numeric answers, map each to closest label value
-                $labelValues = array_map(function($num) use ($responseValueMap) {
-                    // Find the closest label value
-                    $closest = null;
-                    $minDiff = null;
-                    foreach ($responseValueMap as $label => $val) {
-                        $diff = abs($num - $val);
-                        if ($minDiff === null || $diff < $minDiff) {
-                            $minDiff = $diff;
-                            $closest = $val;
-                        }
-                    }
-                    return $closest;
-                }, $answers);
-                $questionnaire_response_avg = array_sum($labelValues) / 3;
-            }
+            // Calculate questionnaire_response_avg - ALWAYS sum of response numbers divided by 3
+            $answerSum = array_sum($answers);
+            $questionnaire_response_avg = $answerSum / 3;
 
             $results[] = [
                 'vector_id' => $vectorId,
                 'average_response_score' => $averageScore,
                 'intensity_score' => $intensityScore,
                 'intensity_index' => $intensityIndex,
-                'questionnaire_response_avg' => is_numeric($questionnaire_response_avg) ? number_format($questionnaire_response_avg, 1) : $questionnaire_response_avg
+                'questionnaire_response_avg' => number_format($questionnaire_response_avg, 1)
             ];
         }
 

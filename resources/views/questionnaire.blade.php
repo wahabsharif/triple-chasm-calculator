@@ -80,13 +80,12 @@
                         <th class="questionnaire-th" style="width: 200px">Vector</th>
                         <th class="questionnaire-th">Question</th>
                         <th class="questionnaire-th" style="width: 200px">Response</th>
-                        <th class="questionnaire-th" style="width: 120px">Avg</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($questionnaires as $questionnaire)
                         @php
-                            // Prepare all field names for this vector
+                            // Prepare all field names for this vector (for select fields)
                             $vectorFieldNames = [];
                             for ($i = 0; $i < count($questionnaire['questions']); $i++) {
                                 if ($questionnaire['id'] <= 4) {
@@ -105,17 +104,6 @@
                                     $vectorFieldNames[] = $vectorCodes[$questionnaire['id']] . '_' . ($i + 1);
                                 }
                             }
-                            // Calculate vector average
-                            $vectorSum = 0;
-                            $vectorCount = 0;
-                            foreach ($vectorFieldNames as $fname) {
-                                $selectedLabel = old($fname, $questionnaireData[$fname] ?? null);
-                                if ($selectedLabel && isset($scoreMap[$selectedLabel])) {
-                                    $vectorSum += $scoreMap[$selectedLabel];
-                                    $vectorCount++;
-                                }
-                            }
-                            $vectorAvg = $vectorCount ? number_format($vectorSum / $vectorCount, 1) : '';
                         @endphp
                         @foreach ($questionnaire['questions'] as $questionIndex => $question)
                             <tr>
@@ -139,14 +127,6 @@
                                         @endforeach
                                     </select>
                                 </td>
-
-                                {{-- Vector Average (only in first row) --}}
-                                @if ($questionIndex === 0)
-                                    <td rowspan="{{ count($questionnaire['questions']) }}"
-                                        style="text-align:center; font-weight:bold; background:#f7f7f7; vertical-align:middle;">
-                                        {{ $vectorAvg }}
-                                    </td>
-                                @endif
                             </tr>
                         @endforeach
                     @endforeach
@@ -156,40 +136,29 @@
                 <button type="submit" class="btn btn-primary">Save Questionnaire</button>
             </div>
         </form>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                document.querySelectorAll('.auto-save-select').forEach(function(select) {
-                    select.addEventListener('change', function() {
-                        const field = this.getAttribute('data-field');
-                        const value = this.value;
-                        const token = document.querySelector('input[name="_token"]').value;
-                        fetch("{{ route('questionnaire.store') }}", {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'X-CSRF-TOKEN': token,
-                                    'Accept': 'application/json'
-                                },
-                                body: JSON.stringify({
-                                    field: field,
-                                    value: value
-                                })
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.auto-save-select').forEach(function(select) {
+                select.addEventListener('change', function() {
+                    const field = this.getAttribute('data-field');
+                    const value = this.value;
+                    const token = document.querySelector('input[name="_token"]').value;
+                    fetch("{{ route('questionnaire.store') }}", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': token,
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                field: field,
+                                value: value
                             })
-                            .then(response => response.json())
-                            .then(data => {
-                                // Display the stored field and value in the console log
-                                if (data && data.field && data.value) {
-                                    console.log('Saved:', data.field, '=', data.value);
-                                } else {
-                                    console.log('Response:', data);
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Error:', error);
-                            });
-                    });
+                        })
+                        .then(response => response.json())
                 });
             });
-        </script>
-    </div>
+        });
+    </script>
 @endsection
