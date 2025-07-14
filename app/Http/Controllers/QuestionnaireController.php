@@ -364,7 +364,7 @@ class QuestionnaireController extends Controller
     /**
      * Get intensity score values for all vectors
      */
-    private function getIntensityScoreValues(): array
+    public static function getIntensityScoreValues(): array
     {
         return [
             [35, 42, 43, 48, 53, 67, 79, 72, 68, 71, 63], // E1. Market Spaces
