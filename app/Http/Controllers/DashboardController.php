@@ -20,7 +20,21 @@ class DashboardController extends Controller
         $questionnaires = (new QuestionnaireController)->getQuestionnaireDataWithAvg($questionnaireData, $scoreMap);
         $intensityScoreValues = QuestionnaireController::getIntensityScoreValues();
 
+        // Steps data for dashboard
+        $stepsData = [
+            0 => "Complete the PROFILE & QUESTIONNAIRE.",
+            1100 => "Your total score is unusually high so you should consider reassessing your input after reviewing the Triple Chasm resources including our website and /or books.\n  \nIf you are still confident of your input, it looks like you are ready for the next step on your commercialisation journey. Download our Commercialisation Canvas to start planning or get in touch if you’d like to join one of our market space focussed commercialisation programmes.",
+            100 => "Your total score is unusually low so you should consider reassessing your input after reviewing the Triple Chasm resources including our website and / or books. \n  \nIf you are still confident of your input, it looks like you need to act quickly to get your business back on track. Contact us to discuss your situation and the most appropriate next steps.",
+            15 => "It looks like you’re in good shape and ready for the next step. \n    \nYour product looks good relative to the average Commercialisation Intensity for 304 successfully commercialised products at the selected Maturity. So, we’d suggest downloading our Commercialisation Canvas to start planning or get in touch if you’d like to join one of our market space focussed commercialisation programmes.”",
+            7 => "It looks like you’ve got a lot of work to do to achieve your selected Maturity.\n   \nYour product falls short relative to the average Commercialisation Intensity for 304 successfully commercialised products at the selected Maturity. So, we’d suggest you first reassess your input after reviewing the Triple Chasm resources including our website and books. \n   \nIf you are still confident of your input we’d suggest you download our Commercialisation Canvas to help prioritise your next steps or get in touch if you’d like to discuss your situation and / or join one of our market space focussed commercialisation programmes.",
+            'ELSE' => "It looks like you’re facing a few challenges and need to prioritise your effort for the next step along the commercialisation journey. \n   \nYour product looks OK relative to the average Commercialisation Intensity for 304 successfully commercialised products at the selected Maturity. So, we’d suggest downloading our Commercialisation Canvas to start planning or get in touch if you’d like to join one of our market space focussed commercialisation programmes.”"
+        ];
+
         $vectorResults = [];
+        // Calculate the sum of all questionnaire_response_avg from all data
+        $questionnaire_response_avg_sum = array_sum(array_map(function ($vector) {
+            return isset($vector['questionnaire_response_avg']) && $vector['questionnaire_response_avg'] !== '' ? (float)$vector['questionnaire_response_avg'] : 0;
+        }, $questionnaires));
         foreach ($questionnaires as $i => $vector) {
             $vectorName = $vector['vector_name'] ?? 'Vector ' . ($i + 1);
             $productMaturityIndex = isset($profileData['product_maturity']) ? (int)$profileData['product_maturity'] : null;
@@ -67,11 +81,12 @@ class DashboardController extends Controller
                 'intensity_score_sum' => $intensity_score_sum,
                 'questionnaire_response_avg' => $questionnaire_response_avg,
                 'intensity_less_score' => $intensity_less_score,
+                'questionnaire_response_avg_sum' => $questionnaire_response_avg_sum,
                 'status' => $status
             ];
         }
 
         Log::info('DashboardController returning vector results', $vectorResults);
-        return view('dashboard', compact('profileData', 'vectorResults'));
+        return view('dashboard', compact('profileData', 'vectorResults', 'stepsData', 'questionnaire_response_avg_sum'));
     }
 }

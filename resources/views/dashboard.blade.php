@@ -51,7 +51,7 @@
                                 @endphp
                                 <tr>
                                     <td class="status {{ $statusClass }}">{{ $vector['status'] }}</td>
-                                    <td class="vector-label">{{ $vector['name'] }}</td>
+                                    <td class="vector-label">{{ $vector['vector_name'] }}</td>
                                 </tr>
                             @endforeach
                         @endif
@@ -166,12 +166,12 @@
 
 
         .needs-consideration {
-            background: #ffe066;
+            background: #ffc000;
             color: #333;
         }
 
         .looks-good {
-            background: #00e676;
+            background: #00ff00;
             color: #222;
         }
 
