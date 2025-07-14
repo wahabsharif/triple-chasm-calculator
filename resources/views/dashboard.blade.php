@@ -60,12 +60,9 @@
                 <div class="vector-status-container">
                     <div class="vector-status-title">Next Steps</div>
                     <div class="next-steps-content">
-                        <p>It looks like you’re facing a few challenges and need to prioritise your effort for the next step
-                            along the commercialisation journey.</p>
-                        <p>Your product looks OK relative to the average Commercialisation Intensity for 304 successfully
-                            commercialised products at the selected Maturity. So, we’d suggest downloading our
-                            Commercialisation Canvas to start planning or get in touch if you’d like to join one of our
-                            market space focussed commercialisation programmes.”</p>
+                        @if (isset($stepsDataResult) && !empty($stepsDataResult))
+                            <p>{!! nl2br(e($stepsDataResult)) !!}</p>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -176,8 +173,8 @@
         }
 
         .needs-attention {
-            background: #ff1744;
-            color: #fff;
+            background: #ff0000;
+            color: #222;
         }
 
         .vector-label {

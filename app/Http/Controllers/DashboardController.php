@@ -105,6 +105,27 @@ class DashboardController extends Controller
         Log::info('DashboardController returning vector results', $vectorResults);
         Log::info('Total status_count_sum: ' . $status_count_sum);
 
-        return view('dashboard', compact('profileData', 'vectorResults', 'stepsData', 'questionnaire_response_avg_sum', 'status_count_sum'));
+        // Calculation logic based on nested IF formula
+        // Map keys to variables for clarity
+        $stepsData_very_high = 1100;
+        $stepsData_very_low = 100;
+        $stepsData_good = 15;
+        $stepsData_work = 7;
+
+        if ($intensity_score_sum == $stepsData_very_high) {
+            $stepsDataResult = $stepsData[$stepsData_very_high];
+        } elseif ($questionnaire_response_avg_sum > $stepsData_very_high) {
+            $stepsDataResult = $stepsData[$stepsData_very_high];
+        } elseif ($questionnaire_response_avg_sum < $stepsData_very_low) {
+            $stepsDataResult = $stepsData[$stepsData_very_low];
+        } elseif ($status_count_sum > $stepsData_good) {
+            $stepsDataResult = $stepsData[$stepsData_good];
+        } elseif ($status_count_sum < $stepsData_work) {
+            $stepsDataResult = $stepsData[$stepsData_work];
+        } else {
+            $stepsDataResult = $stepsData['ELSE'];
+        }
+
+        return view('dashboard', compact('profileData', 'vectorResults', 'stepsData', 'stepsDataResult', 'questionnaire_response_avg_sum', 'status_count_sum'));
     }
 }
