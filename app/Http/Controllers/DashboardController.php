@@ -49,12 +49,25 @@ class DashboardController extends Controller
             $intensity_less_score = $intensity_score - $questionnaire_response_avg;
             $intensity_less_score = is_numeric($intensity_less_score) ? number_format($intensity_less_score, 1) : null;
 
+            // Determine status
+            $status = '';
+            if ($intensity_score_sum == 0) {
+                $status = '';
+            } elseif ($intensity_less_score < 10) {
+                $status = 'Looks good';
+            } elseif ($intensity_less_score > 50) {
+                $status = 'Needs attention';
+            } else {
+                $status = 'Needs consideration';
+            }
+
             $vectorResults[] = [
                 'vector_name' => $vectorName,
                 'intensity_score' => $intensity_score,
                 'intensity_score_sum' => $intensity_score_sum,
                 'questionnaire_response_avg' => $questionnaire_response_avg,
-                'intensity_less_score' => $intensity_less_score
+                'intensity_less_score' => $intensity_less_score,
+                'status' => $status
             ];
         }
 
