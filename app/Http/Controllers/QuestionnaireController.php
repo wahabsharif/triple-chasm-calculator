@@ -46,7 +46,7 @@ class QuestionnaireController extends Controller
     /**
      * Add vector average to each questionnaire vector
      */
-    private function getQuestionnaireDataWithAvg($questionnaireData, $scoreMap)
+    public function getQuestionnaireDataWithAvg($questionnaireData, $scoreMap)
     {
         $questionnaires = $this->getQuestionnaireData();
 
@@ -350,7 +350,7 @@ class QuestionnaireController extends Controller
     /**
      * Get response data mapping
      */
-    private function getResponseData(): array
+    public function getResponseData(): array
     {
         return [
             'Strongly disagree' => 0,
