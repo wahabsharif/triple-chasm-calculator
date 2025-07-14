@@ -38,6 +38,8 @@ class DashboardController extends Controller
             }
         }
 
+        // Ensure intensity_score_sum is always set (0 if not calculated)
+        $intensity_score_sum = $intensity_score_sum ?? 0;
         return view('dashboard', compact('profileData',  'intensity_score', 'intensity_score_sum'));
     }
 }
