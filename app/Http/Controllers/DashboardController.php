@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\QuestionnaireController;
 
 class DashboardController extends Controller
@@ -13,33 +14,51 @@ class DashboardController extends Controller
         // Get the profile data from session
         $profileData = Session::get('profile_data', []);
 
-        // Get product_maturity from profile data and calculate intensity_score
-        $intensity_score = null;
-        $intensity_score_sum = null;
+        // Get all questionnaire data with averages
+        $questionnaireData = Session::get('questionnaire_data', []);
+        $scoreMap = (new QuestionnaireController)->getResponseData();
+        $questionnaires = (new QuestionnaireController)->getQuestionnaireDataWithAvg($questionnaireData, $scoreMap);
         $intensityScoreValues = QuestionnaireController::getIntensityScoreValues();
 
-        if (isset($profileData['product_maturity'])) {
-            $productMaturityIndex = (int) $profileData['product_maturity'];
-            if ($productMaturityIndex >= 0 && $productMaturityIndex <= 10) {
-                // Use the first vector (index 0) as per instruction
-                if (isset($intensityScoreValues[0][$productMaturityIndex])) {
-                    $intensity_score = $intensityScoreValues[0][$productMaturityIndex];
+        $vectorResults = [];
+        foreach ($questionnaires as $i => $vector) {
+            $vectorName = $vector['vector_name'] ?? 'Vector ' . ($i + 1);
+            $productMaturityIndex = isset($profileData['product_maturity']) ? (int)$profileData['product_maturity'] : null;
+            $intensity_score = null;
+            $intensity_score_sum = null;
+            $intensity_less_score = null;
+            $questionnaire_response_avg = isset($vector['questionnaire_response_avg']) && $vector['questionnaire_response_avg'] !== '' ? (float)$vector['questionnaire_response_avg'] : 0;
+
+            // Intensity score for this vector at product maturity index
+            if ($productMaturityIndex !== null && $productMaturityIndex >= 0 && $productMaturityIndex <= 10) {
+                if (isset($intensityScoreValues[$i][$productMaturityIndex])) {
+                    $intensity_score = $intensityScoreValues[$i][$productMaturityIndex];
                 }
             }
-        }
 
-        // Calculate sum of all intensity scores for the selected product_maturity index (column) across all vectors
-        if (isset($productMaturityIndex)) {
-            $intensity_score_sum = 0;
-            foreach ($intensityScoreValues as $vector) {
-                if (isset($vector[$productMaturityIndex])) {
-                    $intensity_score_sum += $vector[$productMaturityIndex];
+            // Sum of all intensity scores for this product maturity index across all vectors
+            if ($productMaturityIndex !== null) {
+                $intensity_score_sum = 0;
+                foreach ($intensityScoreValues as $vec) {
+                    if (isset($vec[$productMaturityIndex])) {
+                        $intensity_score_sum += $vec[$productMaturityIndex];
+                    }
                 }
             }
+            $intensity_score_sum = $intensity_score_sum ?? 0;
+            $intensity_less_score = $intensity_score - $questionnaire_response_avg;
+            $intensity_less_score = is_numeric($intensity_less_score) ? number_format($intensity_less_score, 1) : null;
+
+            $vectorResults[] = [
+                'vector_name' => $vectorName,
+                'intensity_score' => $intensity_score,
+                'intensity_score_sum' => $intensity_score_sum,
+                'questionnaire_response_avg' => $questionnaire_response_avg,
+                'intensity_less_score' => $intensity_less_score
+            ];
         }
 
-        // Ensure intensity_score_sum is always set (0 if not calculated)
-        $intensity_score_sum = $intensity_score_sum ?? 0;
-        return view('dashboard', compact('profileData',  'intensity_score', 'intensity_score_sum'));
+        Log::info('DashboardController returning vector results', $vectorResults);
+        return view('dashboard', compact('profileData', 'vectorResults'));
     }
 }
