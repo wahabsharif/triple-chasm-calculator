@@ -66,11 +66,6 @@
     </style>
 
     <div class="container questionnaire-container">
-        @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
 
         <form method="POST" action="{{ route('questionnaire.store') }}" style="border: 4px solid #595959">
             @csrf
@@ -132,9 +127,6 @@
                     @endforeach
                 </tbody>
             </table>
-            <div style="text-align:center; margin: 20px 0;">
-                <button type="submit" class="btn btn-primary">Save Questionnaire</button>
-            </div>
         </form>
     </div>
     <script>
