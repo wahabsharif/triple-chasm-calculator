@@ -32,8 +32,7 @@ class ClearCacheController extends Controller
             'cache:clear',
             'optimize:clear',
             'clear-compiled',
-            'queue:clear', // Clear failed jobs
-            'storage:link', // Recreate storage links after clearing
+            'storage:link',
         ];
 
         $output = [];

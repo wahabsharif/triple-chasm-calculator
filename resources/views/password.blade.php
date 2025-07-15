@@ -46,7 +46,7 @@
                     }) => {
                         if (status === 200 && body.success) {
                             // Force a full page reload after successful password
-                            window.location.href = window.location.origin + '/';
+                            window.location.reload();
                         } else {
                             errorDiv.textContent = body.message || 'Incorrect password.';
                             errorDiv.style.display = 'block';
